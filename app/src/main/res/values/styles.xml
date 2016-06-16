@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/text</item>
+        <item name="android:textColorSecondary">@color/secondary</item>
+        <item name="android:textColorHint">@color/hint</item>
+        <item name="divider">@color/dividers</item>
+        <item name="icon">@color/icons</item>
+        <item name="android:windowBackground">@color/list_background</item>
     </style>
 
 </resources>
