@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Status status = mStatuses.statusList.get(position);
         Status retweetStatus = null;
+        PicUrlHolder picUrlHolder = null;
+
 
         holder.tvCreateTime.setText(status.created_at);
         holder.tvUserName.setText(status.user.screen_name);
@@ -50,11 +53,18 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         if (status.retweeted_status == null) {//原创微博
             holder.divider.setVisibility(View.GONE);
             holder.tvRetweetStatus.setVisibility(View.GONE);
+            if (status.pic_urls != null && status.pic_urls.size() > 0) {
+                picUrlHolder = new PicUrlHolder(status.pic_urls);
+            }
         } else {//转发微博
             retweetStatus = status.retweeted_status;
             holder.tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
+            if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
+                picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
+            }
         }
 
+        //显示头像
         DraweeController profileImgController = Fresco.newDraweeControllerBuilder()
                 .setOldController(holder.ivProfile.getController())
                 .setLowResImageRequest(ImageRequest.fromUri(status.user.profile_image_url))
@@ -62,12 +72,19 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                 .build();
         holder.ivProfile.setController(profileImgController);
 
-        DraweeController statusImgController = Fresco.newDraweeControllerBuilder()
-                .setOldController(holder.ivStatus.getController())
-                .setLowResImageRequest(ImageRequest.fromUri(status.thumbnail_pic))
-                .setImageRequest(ImageRequest.fromUri(status.bmiddle_pic))
-                .build();
-        holder.ivStatus.setController(statusImgController);
+
+        if (picUrlHolder != null) {//若有图，显示图片
+            if(picUrlHolder.mLength==1){
+                holder.gridStatusImg.setNumColumns(2);
+            }
+            ImgGridAdapter imgGridAdapter = new ImgGridAdapter(mContext, picUrlHolder);
+            holder.gridStatusImg.setAdapter(imgGridAdapter);
+            holder.gridStatusImg.setVisibility(View.VISIBLE);
+        }else{
+            holder.gridStatusImg.setVisibility(View.GONE);
+        }
+
+
     }
 
 
@@ -85,7 +102,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         public TextView tvRetweetStatus;
         public View divider;
         public LinearLayout llInStatus;
-        public SimpleDraweeView ivStatus;
+        public GridView gridStatusImg;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -96,7 +113,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             tvRetweetStatus = (TextView) itemView.findViewById(R.id.tvRetweetStatus);
             divider = itemView.findViewById(R.id.divider);
             llInStatus = (LinearLayout) itemView.findViewById(R.id.llInStatus);
-            ivStatus = (SimpleDraweeView) itemView.findViewById(R.id.ivStatus);
+            gridStatusImg = (GridView) itemView.findViewById(R.id.gridStatusImg);
         }
     }
 
