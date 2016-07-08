@@ -1,6 +1,7 @@
 package bupt.tiantian.weibo.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -10,14 +11,19 @@ import android.view.View;
 
 import bupt.tiantian.weibo.R;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements MainActivityFragment.OnFragmentInteractionListener,
+        ShowPictureFragment.OnFragmentInteractionListener {
 
+
+    AppBarLayout mLayoutToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mLayoutToolbar = (AppBarLayout) findViewById(R.id.layoutToolbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

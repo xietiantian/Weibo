@@ -3,14 +3,14 @@
     android:id="@+id/fragShowPic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#cccccc"
     tools:context=".activity.ShowPictureFragment">
 
-    <me.relex.photodraweeview.sample.MultiTouchViewPager
-        android:id="@+id/view_pager"
+    <bupt.tiantian.weibo.customview.MultiTouchViewPager
+        android:id="@+id/vpShowPic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize" />
+        android:background="#000000"/>
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/indicator"

@@ -1,6 +1,6 @@
 package bupt.tiantian.weibo.activity;
 
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import bupt.tiantian.weibo.R;
+import bupt.tiantian.weibo.customview.MultiTouchViewPager;
+import bupt.tiantian.weibo.helper.DraweePagerAdapter;
 import bupt.tiantian.weibo.helper.PicUrl;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,12 @@ public class ShowPictureFragment extends Fragment {
     private int mPosition;
 
     private OnFragmentInteractionListener mListener;
+
+    /**
+     * UI控件
+     */
+    private View mShowPicFragmentView;
+
 
     public ShowPictureFragment() {
         // Required empty public constructor
@@ -62,14 +71,33 @@ public class ShowPictureFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_show_picture, container, false);
+        mShowPicFragmentView = inflater.inflate(R.layout.fragment_show_picture, container, false);
+        CircleIndicator indicator = (CircleIndicator)mShowPicFragmentView.findViewById(R.id.indicator);
+        MultiTouchViewPager viewPager = (MultiTouchViewPager) mShowPicFragmentView.findViewById(R.id.vpShowPic);
+        viewPager.setAdapter(new DraweePagerAdapter(mPicUrls));
+        viewPager.setCurrentItem(mPosition);
+        indicator.setViewPager(viewPager);
+        return mShowPicFragmentView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            mListener = (OnFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
         }
+
     }
 
     @Override
@@ -89,7 +117,8 @@ public class ShowPictureFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+//        void onShowPicFragCreate();
+//        void onShowPicFragDetach();
+
     }
 }
