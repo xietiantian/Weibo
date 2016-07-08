@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo;
+package bupt.tiantian.weibo.customview;
 
 import android.content.Context;
 import android.util.AttributeSet;

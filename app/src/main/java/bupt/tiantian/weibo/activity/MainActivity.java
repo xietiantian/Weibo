@@ -1,96 +1,63 @@
 package bupt.tiantian.weibo.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.exception.WeiboException;
-import com.sina.weibo.sdk.net.RequestListener;
-import com.sina.weibo.sdk.openapi.StatusesAPI;
-import com.sina.weibo.sdk.openapi.models.ErrorInfo;
-import com.sina.weibo.sdk.openapi.models.StatusList;
-import com.sina.weibo.sdk.utils.LogUtil;
-
-import bupt.tiantian.weibo.AccessTokenKeeper;
-import bupt.tiantian.weibo.Constants;
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.helper.StatusAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
 
-    private static final String TAG = MainActivity.class.getName();
-    /**
-     * 当前 Token 信息
-     */
-    private Oauth2AccessToken mAccessToken;
-    /**
-     * 用于获取微博信息流等操作的API
-     */
-    private StatusesAPI mStatusesAPI;
-    private RecyclerView mRecyclerView;
-    private ProgressBar mProgressBar;
-    private StatusAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Handle Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // 获取当前已保存过的 Token
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
-        // 对statusAPI实例化
-        mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
-        mStatusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, mListener);//参数3：加载10条微博
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        //show progress
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_normal);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
-    private RequestListener mListener = new RequestListener() {
-        @Override
-        public void onComplete(String response) {
-            if (!TextUtils.isEmpty(response)) {
-                LogUtil.i(TAG, response);
-                if (response.startsWith("{\"statuses\"")) {
-                    // 调用 StatusList#parse 解析字符串成微博列表对象
-                    StatusList statuses = StatusList.parse(response);
-                    if (statuses != null && statuses.total_number > 0) {
-                        Toast.makeText(MainActivity.this,
-                                "获取微博信息流成功, 条数: " + statuses.statusList.size(),
-                                Toast.LENGTH_LONG).show();
-                        mAdapter = new StatusAdapter(MainActivity.this, statuses);
-                        mRecyclerView.setAdapter(mAdapter);
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mProgressBar.setVisibility(View.GONE);
-                    }
-                }
-            }
-        }
+    @Override
+    public FragmentManager getSupportFragmentManager() {
+        return super.getSupportFragmentManager();
+    }
 
-        @Override
-        public void onWeiboException(WeiboException e) {
-            LogUtil.e(TAG, e.getMessage());
-            ErrorInfo info = ErrorInfo.parse(e.getMessage());
-            Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+    @Override
+    public void onStatusPicClicked(Bundle bundle) {
+        ShowPictureFragment showPictureFragment = (ShowPictureFragment) getSupportFragmentManager().findFragmentById(R.id.fragShowPic);
+        if (showPictureFragment != null) {
+            // If article frag is available, we're in two-pane layout...
+            // Call a method in the ShowPictureFragment to update its content
+            System.out.println("we're in two-pane layout");
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags...
+            // Create fragment and give it an argument for the selected article
+            ShowPictureFragment newShowPicFrag = new ShowPictureFragment();
+            newShowPicFrag.setArguments(bundle);
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+//            transaction.replace(R.id.layoutCoordinator, newShowPicFrag);
+            transaction.add(R.id.layoutCoordinator, newShowPicFrag);
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.addToBackStack(null);
+            // Commit the transaction
+            transaction.commit();
+
         }
-    };
+    }
 }

@@ -74,13 +74,16 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
 
 
         if (picUrlHolder != null) {//若有图，显示图片
-            if(picUrlHolder.mLength==1){
+            if (picUrlHolder.getLength() == 1 || picUrlHolder.getLength() == 2 || picUrlHolder.getLength() == 4) {
                 holder.gridStatusImg.setNumColumns(2);
+            } else {
+                holder.gridStatusImg.setNumColumns(3);
             }
             ImgGridAdapter imgGridAdapter = new ImgGridAdapter(mContext, picUrlHolder);
             holder.gridStatusImg.setAdapter(imgGridAdapter);
+            holder.gridStatusImg.setOnItemClickListener(new OnPicClickListener(mContext, picUrlHolder));
             holder.gridStatusImg.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.gridStatusImg.setVisibility(View.GONE);
         }
 

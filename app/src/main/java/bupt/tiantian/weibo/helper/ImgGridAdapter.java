@@ -30,13 +30,13 @@ public class ImgGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mPicUrlHolder.mLength;
+        return mPicUrlHolder.getLength();
     }
 
     @Override
     public Object getItem(int position) {
         if(position<getCount()){
-            return mPicUrlHolder.picUrlList.get(position);
+            return mPicUrlHolder.getPicUrlList().get(position);
         }else{
             return null;
         }
@@ -49,7 +49,7 @@ public class ImgGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        PicUrlHolder.PicUrl picUrl= (PicUrlHolder.PicUrl) getItem(position);
+        PicUrl picUrl= (PicUrl) getItem(position);
         View view;
         ViewHolder holder;
         if(convertView==null) {
