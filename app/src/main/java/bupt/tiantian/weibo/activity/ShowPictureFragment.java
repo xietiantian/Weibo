@@ -3,6 +3,7 @@ package bupt.tiantian.weibo.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +25,11 @@ import me.relex.circleindicator.CircleIndicator;
  * create an instance of this fragment.
  */
 public class ShowPictureFragment extends Fragment {
-    private static final String PIC_URLS ="url";
+    private static final String PIC_URLS = "url";
     private static final String POSITION = "position";
     private ArrayList<PicUrl> mPicUrls;
     private int mPosition;
-
+    private MultiTouchViewPager mViewPager;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -72,26 +73,36 @@ public class ShowPictureFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mShowPicFragmentView = inflater.inflate(R.layout.fragment_show_picture, container, false);
-        CircleIndicator indicator = (CircleIndicator)mShowPicFragmentView.findViewById(R.id.indicator);
-        MultiTouchViewPager viewPager = (MultiTouchViewPager) mShowPicFragmentView.findViewById(R.id.vpShowPic);
-        viewPager.setAdapter(new DraweePagerAdapter(mPicUrls));
-        viewPager.setCurrentItem(mPosition);
-        indicator.setViewPager(viewPager);
+        CircleIndicator indicator = (CircleIndicator) mShowPicFragmentView.findViewById(R.id.indicator);
+        mViewPager = (MultiTouchViewPager) mShowPicFragmentView.findViewById(R.id.vpShowPic);
+        mViewPager.setAdapter(new DraweePagerAdapter(mPicUrls, this.getContext()));
+        mViewPager.setCurrentItem(mPosition);
+        mListener.onPageSelectedChange(mPosition);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mListener.onPageSelectedChange(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        indicator.setViewPager(mViewPager);
         return mShowPicFragmentView;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try{
+        try {
             mListener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -117,8 +128,8 @@ public class ShowPictureFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-//        void onShowPicFragCreate();
-//        void onShowPicFragDetach();
+        //        void onShowPicFragCreate();
+        void onPageSelectedChange(int position);
 
     }
 }

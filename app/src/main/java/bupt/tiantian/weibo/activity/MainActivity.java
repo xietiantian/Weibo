@@ -16,7 +16,8 @@ public class MainActivity extends AppCompatActivity
         ShowPictureFragment.OnFragmentInteractionListener {
 
 
-    AppBarLayout mLayoutToolbar;
+    private AppBarLayout mLayoutToolbar;
+    private int mPicFragPagerIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,5 +66,14 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
 
         }
+    }
+
+    @Override
+    public void onPageSelectedChange(int position) {
+        mPicFragPagerIdx=position;
+    }
+
+    public int getPicFragPagerIdx() {
+        return mPicFragPagerIdx;
     }
 }

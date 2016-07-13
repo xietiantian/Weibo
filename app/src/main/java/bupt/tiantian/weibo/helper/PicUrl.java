@@ -39,17 +39,19 @@ public class PicUrl implements Parcelable {
     }
 
     public String getLargeUrl() {
-        if (mLargeUrl != null) {
-            return mLargeUrl;
-        } else if (mThumbnailUrl != null) {
+        return mLargeUrl;
+    }
+
+    public void setLargeUrlFromThumb(){
+        if(TextUtils.isEmpty(mLargeUrl)) {
             Matcher matcher = PicUrlHolder.THUMB_PATTERN.matcher(mThumbnailUrl);
             mLargeUrl = matcher.replaceFirst(PicUrlHolder.LARGE_PIC_STRING);
-            return mLargeUrl;
-        } else {
-            return null;
         }
     }
 
+    public boolean isLargeUrlSet(){
+        return !TextUtils.isEmpty(mLargeUrl);
+    }
     /*以下代码为实现parcelable添加*/
     protected PicUrl(Parcel in) {
         mThumbnailUrl = in.readString();

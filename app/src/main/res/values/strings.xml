@@ -11,8 +11,9 @@
     <string name="dialog_nointernet">No internet connection!</string>
     <string name="title_activity_origin_picture">OriginPictureActivity</string>
     <string name="title_activity_main">MainActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_pic_dialog">点我干啥？</string>
+    <string name="sdcard_state_error">sd卡未挂载～不能下载图片哦～</string>
+    <string name="save_pic_success">图片已保存</string>
+    <string name="save_pic_fail">保存图片失败</string>
 
 </resources>

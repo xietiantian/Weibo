@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="OptionStringSet0">
+        <item>查看原图</item>
+        <item>保存图片</item>
+        <item>点你咋滴！</item>
+    </string-array>
+
+    <string-array name="OptionStringSet1">
+        <item>保存图片</item>
+        <item>点你咋滴！</item>
+    </string-array>
+</resources>
