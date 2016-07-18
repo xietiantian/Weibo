@@ -102,13 +102,12 @@ public class ShowPictureFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
+        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override
@@ -130,6 +129,5 @@ public class ShowPictureFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         //        void onShowPicFragCreate();
         void onPageSelectedChange(int position);
-
     }
 }

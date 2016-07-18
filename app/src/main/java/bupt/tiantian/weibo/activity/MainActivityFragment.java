@@ -99,11 +99,11 @@ public class MainActivityFragment extends Fragment {
         super.onAttach(context);
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        try {
+        if (context instanceof OnFragmentInteractionListener) {
             mInteractListener = (OnFragmentInteractionListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 

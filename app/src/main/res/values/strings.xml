@@ -15,5 +15,6 @@
     <string name="sdcard_state_error">sd卡未挂载～不能下载图片哦～</string>
     <string name="save_pic_success">图片已保存</string>
     <string name="save_pic_fail">保存图片失败</string>
+    <string name="title_activity_setting">SettingActivity</string>
 
 </resources>

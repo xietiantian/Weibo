@@ -1,5 +1,6 @@
 package bupt.tiantian.weibo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -7,9 +8,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import bupt.tiantian.weibo.R;
+import bupt.tiantian.weibo.util.NetChecker;
 
 public class MainActivity extends AppCompatActivity
         implements MainActivityFragment.OnFragmentInteractionListener,
@@ -24,6 +28,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        NetChecker.setNetWorkFlag(MainActivity.this);
+        NetChecker.setLargePicFlag(MainActivity.this);
+
+
         mLayoutToolbar = (AppBarLayout) findViewById(R.id.layoutToolbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -36,6 +44,23 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(i);
+//            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
@@ -70,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPageSelectedChange(int position) {
-        mPicFragPagerIdx=position;
+        mPicFragPagerIdx = position;
     }
 
     public int getPicFragPagerIdx() {

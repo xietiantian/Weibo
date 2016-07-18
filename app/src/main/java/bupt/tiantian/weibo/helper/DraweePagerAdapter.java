@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.activity.MainActivity;
+import bupt.tiantian.weibo.util.NetChecker;
 import me.relex.photodraweeview.OnViewTapListener;
 import me.relex.photodraweeview.PhotoDraweeView;
 
@@ -32,7 +33,6 @@ public class DraweePagerAdapter extends PagerAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     AlertDialog picOptAlertDialog;
-    MyHandler mHandler;
 
     public DraweePagerAdapter(ArrayList<PicUrl> picUrls, Context context) {
         mPicUrls = picUrls;
@@ -74,7 +74,8 @@ public class DraweePagerAdapter extends PagerAdapter {
         final PhotoDraweeView photoDraweeView = new PhotoDraweeView(container.getContext());
         photoDraweeView.setTag(position);
         final PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-        final boolean largeUrlSet = mPicUrls.get(position).isLargeUrlSet();
+        //大图已经加载过或者当前设置&网络环境允许加载大图
+        final boolean largeUrlSet = mPicUrls.get(position).isLargeUrlSet() || NetChecker.getLargePicFlag();
         controller.setOldController(photoDraweeView.getController());
         if (largeUrlSet) {
             controller.setLowResImageRequest(ImageRequest.fromUri(mPicUrls.get(position).getMiddleUrl()))

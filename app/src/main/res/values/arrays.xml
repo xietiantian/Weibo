@@ -10,4 +10,16 @@
         <item>保存图片</item>
         <item>点你咋滴！</item>
     </string-array>
+
+    <string-array name="PrefPicShow">
+        <item>WIFI环境下加载高清图片</item>
+        <item>高清图片～质量更高</item>
+        <item>普通图片～流量最少</item>
+    </string-array>
+
+    <string-array name="PrefPicShowValue">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

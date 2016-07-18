@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.activity.MainActivity;
 import bupt.tiantian.weibo.activity.MainActivityFragment;
+import bupt.tiantian.weibo.util.NetChecker;
 
 /**
  * Created by tiantian on 16-7-5.
@@ -27,6 +28,8 @@ public class OnPicClickListener implements AdapterView.OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
+        System.out.println("pic large = "+ NetChecker.getLargePicFlag());
+        bundle.putBoolean("large",NetChecker.getLargePicFlag());
         bundle.putParcelableArrayList("url", mPicUrlHolder.getPicUrlList());
         MainActivityFragment mainFrag= (MainActivityFragment) ((MainActivity)mContext).getSupportFragmentManager().findFragmentById(R.id.fragMain);
         if(mainFrag!=null){
