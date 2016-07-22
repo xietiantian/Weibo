@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile project(':photodraweeview')
     compile project(':weiboSDK')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
@@ -30,6 +31,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.facebook.fresco:fresco:0.10.0'
     compile 'com.facebook.fresco:animated-gif:0.10.0'
-    compile 'me.relex:photodraweeview:1.0.0'
     compile 'me.relex:circleindicator:1.2.1'
 }

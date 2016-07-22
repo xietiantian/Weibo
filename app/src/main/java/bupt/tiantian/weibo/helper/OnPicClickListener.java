@@ -28,7 +28,6 @@ public class OnPicClickListener implements AdapterView.OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
-        System.out.println("pic large = "+ NetChecker.getLargePicFlag());
         bundle.putBoolean("large",NetChecker.getLargePicFlag());
         bundle.putParcelableArrayList("url", mPicUrlHolder.getPicUrlList());
         MainActivityFragment mainFrag= (MainActivityFragment) ((MainActivity)mContext).getSupportFragmentManager().findFragmentById(R.id.fragMain);

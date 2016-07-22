@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity
         if (showPictureFragment != null) {
             // If article frag is available, we're in two-pane layout...
             // Call a method in the ShowPictureFragment to update its content
-            System.out.println("we're in two-pane layout");
         } else {
             // Otherwise, we're in the one-pane layout and must swap frags...
             // Create fragment and give it an argument for the selected article

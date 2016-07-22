@@ -25,7 +25,7 @@ public class FileCopyHelper {
      * @return {@code true} 拷贝成功
      * {@code false} on failure
      */
-    public static boolean copyFile(File srcFile, String dstDirString, String dstFileName) {
+    public static File copyFile(File srcFile, String dstDirString, String dstFileName) {
         FileInputStream inStreamForSuffix = null;
         FileInputStream inStream = null;
         FileOutputStream outStream = null;
@@ -33,31 +33,32 @@ public class FileCopyHelper {
         FileChannel outChannel = null;
         try {
             if (!srcFile.exists()) {
-                return false;
+                return null;
             }
             if (!srcFile.isFile()) {
-                return false;
+                return null;
             }
             if (!srcFile.canRead()) {
-                return false;
+                return null;
             }
             File dstDir = new File(dstDirString);
             if (!dstDir.exists()) {//目录不存在
                 if (!dstDir.mkdirs())//此时返回false一定是因为failure
-                    return false;
+                    return null;
             }
             inStreamForSuffix = new FileInputStream(srcFile); //读入原文件
             inStream = new FileInputStream(srcFile);
             String suffix = getTypeByStream(inStreamForSuffix);
-            outStream = new FileOutputStream(dstDirString + File.separator + dstFileName + "." + suffix);
+            File dstFile=new File(dstDirString + File.separator + dstFileName + "." + suffix);
+            outStream = new FileOutputStream(dstFile);
             inChannel = inStream.getChannel();//得到对应的文件通道
             outChannel = outStream.getChannel();//得到对应的文件通道
             inChannel.transferTo(0, inChannel.size(), outChannel);//连接两个通道，并且从in通道读取，然后写入out通道
-            return true;
+            return dstFile;
         } catch (IOException e) {
             Log.e(TAG, "复制文件出错");
             e.printStackTrace();
-            return false;
+            return null;
         } finally {
             try {
                 if (inStream != null) {
@@ -79,7 +80,7 @@ public class FileCopyHelper {
             } catch (IOException e) {
                 Log.e(TAG, "IO流关闭出错");
                 e.printStackTrace();
-                return false;
+                return null;
             }
         }
     }

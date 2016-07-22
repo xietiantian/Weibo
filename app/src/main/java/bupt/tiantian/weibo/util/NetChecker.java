@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import bupt.tiantian.weibo.activity.SettingActivity;
 
@@ -19,6 +18,7 @@ import bupt.tiantian.weibo.activity.SettingActivity;
  */
 public class NetChecker {
 
+    private static final String TAG="NetworkChecker";
     public static final int MOBILE_NETWORK = 1;
     public static final int WIFI_NETWORK = 2;
     public static final int NO_NETWORK = 0;
@@ -45,11 +45,11 @@ public class NetChecker {
                 for (Network mNetwork : networks) {
                     networkInfo = connectivityManager.getNetworkInfo(mNetwork);
                     if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
-                        if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE || resultNum != WIFI_NETWORK)
+                        if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE && resultNum != WIFI_NETWORK)
                             resultNum = MOBILE_NETWORK;
                         else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI)
                             resultNum = WIFI_NETWORK;
-                        Log.w("Network", "NETWORKNAME: " + networkInfo.getTypeName());
+                        Log.d(TAG, "NETWORKNAME: " + networkInfo.getTypeName());
                     }
                 }
             } else {
@@ -58,11 +58,11 @@ public class NetChecker {
                 if (info != null) {
                     for (NetworkInfo anInfo : info) {
                         if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
-                            if (anInfo.getType() == ConnectivityManager.TYPE_MOBILE || resultNum != WIFI_NETWORK)
+                            if (anInfo.getType() == ConnectivityManager.TYPE_MOBILE && resultNum != WIFI_NETWORK)
                                 resultNum = MOBILE_NETWORK;
                             else if (anInfo.getType() == ConnectivityManager.TYPE_WIFI)
                                 resultNum = WIFI_NETWORK;
-                            Log.w("Network", "NETWORKNAME: " + anInfo.getTypeName());
+                            Log.d(TAG, "NETWORKNAME: " + anInfo.getTypeName());
                         }
                     }
                 }
@@ -89,7 +89,7 @@ public class NetChecker {
             }
         }
         largePicFlag = result;
-        Toast.makeText(context,"large pic ="+result,Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"show large picture = "+result);
     }
 
     public static void setLargePicFlag(Context context,String picMode) {
@@ -105,7 +105,7 @@ public class NetChecker {
             }
         }
         largePicFlag = result;
-        Toast.makeText(context,"large pic ="+result,Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"show large picture = "+result);
     }
 
     public static boolean getLargePicFlag() {

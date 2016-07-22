@@ -1,10 +1,10 @@
 package bupt.tiantian.weibo.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
 import com.facebook.binaryresource.BinaryResource;
 import com.facebook.binaryresource.FileBinaryResource;
@@ -33,8 +33,7 @@ import bupt.tiantian.weibo.util.FileCopyHelper;
 /**
  * Created by tiantian on 16-7-12.
  */
-public class FrescoDownloadHelper {
-    private static final String TAG = "FrecoDownloadHelper";
+public class FrescoDownloadHelper implements OnPicDownloadListener {
     public static final String DEFAULT_IMG_PATH = Environment.getExternalStorageDirectory().getPath()
             + File.separator + "weibo" + File.separator + "img";
 
@@ -62,10 +61,11 @@ public class FrescoDownloadHelper {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
         final String picName = dateFormat.format(new Date()) + (int) (Math.random() * 9000 + 1000);
         if (file != null) {//磁盘中有缓存文件，拷贝并重命名
-            if (FileCopyHelper.copyFile(file, DEFAULT_IMG_PATH, picName)) {
-                mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_SUCCESS);
+            File savedPic = FileCopyHelper.copyFile(file, DEFAULT_IMG_PATH, picName);
+            if (savedPic != null) {
+                onDownloadSuccess(savedPic);
             } else {
-                mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_FAIL);
+                onDownloadFailed();
             }
         } else {//磁盘中没有缓存文件，去获取bitmap cache中的bitmap
             getImageFromCache(imageRequest, picName);
@@ -95,8 +95,7 @@ public class FrescoDownloadHelper {
             @Override
             public void onNewResultImpl(Bitmap bitmap) {
                 if (bitmap == null) {
-                    Log.e(TAG, "保存图片失败啦,无法下载图片");
-                    mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_FAIL);
+                    onDownloadFailed();
                     return;
                 }
                 File appDir = new File(DEFAULT_IMG_PATH);
@@ -109,17 +108,32 @@ public class FrescoDownloadHelper {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     fos.flush();
                     fos.close();
-                    mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_SUCCESS);
+                    onDownloadSuccess(file);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_FAIL);
+                    onDownloadFailed();
                 }
             }
 
             @Override
             public void onFailureImpl(DataSource dataSource) {
-                mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_FAIL);
+                onDownloadFailed();
             }
         }, CallerThreadExecutor.getInstance());
+    }
+
+    @Override
+    public void onDownloadSuccess(File file) {
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(file);
+        intent.setData(uri);
+        mContext.sendBroadcast(intent);//这个广播的目的是更新图库
+        mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_SUCCESS);
+    }
+
+    @Override
+    public void onDownloadFailed() {
+        mHandler.sendEmptyMessage(Constants.MSG_SAVE_PIC_FAIL);
+
     }
 }

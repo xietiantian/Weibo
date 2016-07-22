@@ -1,10 +1,13 @@
 package bupt.tiantian.weibo.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 
@@ -28,16 +32,21 @@ import me.relex.photodraweeview.PhotoDraweeView;
  */
 public class DraweePagerAdapter extends PagerAdapter {
 
-
+    private static final String TAG = "DraweePagerAdapter";
     private ArrayList<PicUrl> mPicUrls;
     private Context mContext;
     private LayoutInflater mInflater;
+    private int mViewHeight, mViewWidth;
     AlertDialog picOptAlertDialog;
 
     public DraweePagerAdapter(ArrayList<PicUrl> picUrls, Context context) {
         mPicUrls = picUrls;
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
+        Rect frame = new Rect();
+        ((Activity) mContext).getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        mViewHeight = frame.bottom - frame.top;
+        mViewWidth = frame.right;
     }
 
     @Override
@@ -70,6 +79,11 @@ public class DraweePagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+    }
+
+    @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         final PhotoDraweeView photoDraweeView = new PhotoDraweeView(container.getContext());
         photoDraweeView.setTag(position);
@@ -87,12 +101,49 @@ public class DraweePagerAdapter extends PagerAdapter {
         controller.setAutoPlayAnimations(true);
         controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
             @Override
+            public void onSubmit(String id, Object callerContext) {
+                super.onSubmit(id, callerContext);
+            }
+
+            @Override
+            public void onIntermediateImageSet(String id, ImageInfo imageInfo) {
+                super.onIntermediateImageSet(id, imageInfo);
+
+                int imgHeight = imageInfo.getHeight();
+                int imgWidth = imageInfo.getWidth();
+                if (mViewWidth != 0 && mViewHeight != 0) {
+                    if (imgHeight / (float) imgWidth > mViewHeight / (float) mViewWidth) {
+                        float scale = imgHeight * mViewWidth / (float) (imgWidth * mViewHeight);
+                        photoDraweeView.setMaximumScale(scale * 3);
+                        photoDraweeView.setMediumScale(scale);
+                        photoDraweeView.setMinimumScale(1);
+                        photoDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.FIT_START);
+                    }
+                }
+                Log.d(TAG,"intermediate img height:"+imgHeight+" width:"+imgWidth);
+                photoDraweeView.update(imgWidth, imgHeight);
+            }
+
+            @Override
             public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
                 super.onFinalImageSet(id, imageInfo, animatable);
+
                 if (imageInfo == null) {
                     return;
                 }
-                photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
+                int imgHeight = imageInfo.getHeight();
+                int imgWidth = imageInfo.getWidth();
+                if (mViewWidth != 0 && mViewHeight != 0) {
+                    if (imgHeight / (float) imgWidth > mViewHeight / (float) mViewWidth) {
+                        float scale = imgHeight * mViewWidth / (float) (imgWidth * mViewHeight);
+                        photoDraweeView.setMaximumScale(scale * 3);
+                        photoDraweeView.setMediumScale(scale);
+                        photoDraweeView.setMinimumScale(1);
+                        photoDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.FIT_START);
+                    }
+                }
+                Log.d(TAG,"img height:"+imgHeight+" width:"+imgWidth);
+                photoDraweeView.update(imgWidth, imgHeight);
             }
         });
         photoDraweeView.setController(controller.build());
@@ -106,18 +157,16 @@ public class DraweePagerAdapter extends PagerAdapter {
         //长按弹出菜单
         photoDraweeView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {//弹出alertdialog
-                showAlertDialog(largeUrlSet, position);
+            public boolean onLongClick(android.view.View v) {
+                showAlertDialog(largeUrlSet, position);//弹出alertdialog
                 return true;
             }
         });
-
         try {
             container.addView(photoDraweeView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return photoDraweeView;
     }
 
