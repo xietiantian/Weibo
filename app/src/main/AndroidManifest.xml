@@ -33,12 +33,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="bupt.tiantian.weibo.activity.MainActivity" />
         </activity>
-        <!--android:parentActivityName=".activity.MainActivity"-->
+        <!-- android:parentActivityName=".activity.MainActivity" -->
         <receiver android:name=".util.NetChecker$NetCheckReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".activity.ShowPictureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_show_picture"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="bupt.tiantian.weibo.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -22,7 +22,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import java.util.ArrayList;
 
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.activity.MainActivity;
+import bupt.tiantian.weibo.activity.ShowPictureActivity;
 import bupt.tiantian.weibo.util.NetChecker;
 import me.relex.photodraweeview.OnViewTapListener;
 import me.relex.photodraweeview.PhotoDraweeView;
@@ -70,7 +70,7 @@ public class DraweePagerAdapter extends PagerAdapter {
     @Override
     public int getItemPosition(Object object) {//设置只刷新当前页
         View view = (View) object;
-        int currentPage = ((MainActivity) mContext).getPicFragPagerIdx();
+        int currentPage = ((ShowPictureActivity) mContext).getPosition();
         if (currentPage == (int) view.getTag()) {
             return POSITION_NONE;
         } else {
@@ -151,7 +151,7 @@ public class DraweePagerAdapter extends PagerAdapter {
         photoDraweeView.setOnViewTapListener(new OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
-                ((MainActivity) mContext).getSupportFragmentManager().popBackStack();
+                ((ShowPictureActivity) mContext).finish();
             }
         });
         //长按弹出菜单

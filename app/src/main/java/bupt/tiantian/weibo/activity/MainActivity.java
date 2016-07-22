@@ -16,8 +16,7 @@ import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.util.NetChecker;
 
 public class MainActivity extends AppCompatActivity
-        implements MainActivityFragment.OnFragmentInteractionListener,
-        ShowPictureFragment.OnFragmentInteractionListener {
+        implements MainActivityFragment.OnFragmentInteractionListener{
 
 
     private AppBarLayout mLayoutToolbar;
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             Intent i = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(i);
-//            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -70,34 +68,28 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onStatusPicClicked(Bundle bundle) {
-        ShowPictureFragment showPictureFragment = (ShowPictureFragment) getSupportFragmentManager().findFragmentById(R.id.fragShowPic);
-        if (showPictureFragment != null) {
-            // If article frag is available, we're in two-pane layout...
-            // Call a method in the ShowPictureFragment to update its content
-        } else {
-            // Otherwise, we're in the one-pane layout and must swap frags...
-            // Create fragment and give it an argument for the selected article
-            ShowPictureFragment newShowPicFrag = new ShowPictureFragment();
-            newShowPicFrag.setArguments(bundle);
-            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Intent intent=new Intent(MainActivity.this,ShowPictureActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
 
-            // Replace whatever is in the fragment_container view with this fragment,
-//            transaction.replace(R.id.layoutCoordinator, newShowPicFrag);
-            transaction.add(R.id.layoutCoordinator, newShowPicFrag);
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.addToBackStack(null);
-            // Commit the transaction
-            transaction.commit();
-
-        }
-    }
-
-    @Override
-    public void onPageSelectedChange(int position) {
-        mPicFragPagerIdx = position;
-    }
-
-    public int getPicFragPagerIdx() {
-        return mPicFragPagerIdx;
+//        ShowPictureFragment showPictureFragment = (ShowPictureFragment) getSupportFragmentManager().findFragmentById(R.id.fragShowPic);
+//        if (showPictureFragment != null) {
+//            // If article frag is available, we're in two-pane layout...
+//            // Call a method in the ShowPictureFragment to update its content
+//        } else {
+//            // Otherwise, we're in the one-pane layout and must swap frags...
+//            // Create fragment and give it an argument for the selected article
+//            ShowPictureFragment newShowPicFrag = new ShowPictureFragment();
+//            newShowPicFrag.setArguments(bundle);
+//            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//
+//            // Replace whatever is in the fragment_container view with this fragment,
+////            transaction.replace(R.id.layoutCoordinator, newShowPicFrag);
+//            transaction.add(R.id.layoutCoordinator, newShowPicFrag);
+//            // and add the transaction to the back stack so the user can navigate back
+//            transaction.addToBackStack(null);
+//            // Commit the transaction
+//            transaction.commit();
+//        }
     }
 }

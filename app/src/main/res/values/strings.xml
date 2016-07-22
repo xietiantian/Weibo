@@ -17,4 +17,10 @@
     <string name="save_pic_fail">保存图片失败</string>
     <string name="title_activity_setting">SettingActivity</string>
 
+    <string name="title_activity_show_picture">ShowPictureActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+
 </resources>
