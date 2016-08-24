@@ -9,4 +9,10 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <!-- 微博TextView自定义属性 -->
+    <declare-styleable name="StatusTextView">
+        <!-- 链接高亮的颜色，默认蓝色 -->
+        <attr name="linkHighlightColor" format="color" />
+    </declare-styleable>
+
 </resources>

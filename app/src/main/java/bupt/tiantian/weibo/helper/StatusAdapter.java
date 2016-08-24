@@ -21,8 +21,12 @@ import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 
 import bupt.tiantian.weibo.R;
+import bupt.tiantian.weibo.customview.DefaultOnLinkClickListener;
+import bupt.tiantian.weibo.customview.StatusTextView;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder> {
+
+    private static final String TAG = "StatusAdapter";
 
     private StatusList mStatuses;
     private Context mContext;
@@ -49,6 +53,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         holder.tvCreateTime.setText(status.created_at);
         holder.tvUserName.setText(status.user.screen_name);
         holder.tvStatus.setText(status.text);
+        holder.tvStatus.setOnLinkClickListener(new DefaultOnLinkClickListener(mContext));
 
         if (status.retweeted_status == null) {//原创微博
             holder.divider.setVisibility(View.GONE);
@@ -59,6 +64,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         } else {//转发微博
             retweetStatus = status.retweeted_status;
             holder.tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
+            holder.tvRetweetStatus.setOnLinkClickListener(new DefaultOnLinkClickListener(mContext));
             if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
                 picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
             }
@@ -101,8 +107,8 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         public SimpleDraweeView ivProfile;
         public TextView tvUserName;
         public TextView tvCreateTime;
-        public TextView tvStatus;
-        public TextView tvRetweetStatus;
+        public StatusTextView tvStatus;
+        public StatusTextView tvRetweetStatus;
         public View divider;
         public LinearLayout llInStatus;
         public GridView gridStatusImg;
@@ -112,13 +118,13 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             ivProfile = (SimpleDraweeView) itemView.findViewById(R.id.ivProfile);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvCreateTime = (TextView) itemView.findViewById(R.id.tvCreateTime);
-            tvStatus = (TextView) itemView.findViewById(R.id.tvStatus);
-            tvRetweetStatus = (TextView) itemView.findViewById(R.id.tvRetweetStatus);
+            tvStatus = (StatusTextView) itemView.findViewById(R.id.tvStatus);
+            tvRetweetStatus = (StatusTextView) itemView.findViewById(R.id.tvRetweetStatus);
             divider = itemView.findViewById(R.id.divider);
             llInStatus = (LinearLayout) itemView.findViewById(R.id.llInStatus);
             gridStatusImg = (GridView) itemView.findViewById(R.id.gridStatusImg);
+
         }
     }
-
 }
 

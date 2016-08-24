@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -52,7 +51,6 @@ public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
     protected void onDraw(@NonNull Canvas canvas) {
         int saveCount = canvas.save();
         canvas.concat(mAttacher.getDrawMatrix());
-        Log.d(TAG,"matrix = " + mAttacher.getDrawMatrix());
         super.onDraw(canvas);
         canvas.restoreToCount(saveCount);
     }

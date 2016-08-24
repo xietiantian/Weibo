@@ -18,13 +18,17 @@ import bupt.tiantian.weibo.activity.SettingActivity;
  */
 public class NetChecker {
 
-    private static final String TAG="NetworkChecker";
+    private static final String TAG = "NetworkChecker";
     public static final int MOBILE_NETWORK = 1;
     public static final int WIFI_NETWORK = 2;
     public static final int NO_NETWORK = 0;
 
     private static int networkFlag = 0;
     private static boolean largePicFlag = false;
+
+    public NetChecker() {
+
+    }
 
     public class NetCheckReceiver extends BroadcastReceiver {
         @Override
@@ -89,10 +93,10 @@ public class NetChecker {
             }
         }
         largePicFlag = result;
-        Log.d(TAG,"show large picture = "+result);
+        Log.d(TAG, "show large picture = " + result);
     }
 
-    public static void setLargePicFlag(Context context,String picMode) {
+    public static void setLargePicFlag(Context context, String picMode) {
         boolean result = false;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPref.getBoolean(SettingActivity.KEY_PREF_LOAD_PICTURE, true)) {
@@ -105,7 +109,7 @@ public class NetChecker {
             }
         }
         largePicFlag = result;
-        Log.d(TAG,"show large picture = "+result);
+        Log.d(TAG, "show large picture = " + result);
     }
 
     public static boolean getLargePicFlag() {

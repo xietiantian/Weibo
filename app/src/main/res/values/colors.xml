@@ -25,6 +25,7 @@
     <!-- custom-->
     <color name="transparent">#00ffffff</color>
     <color name="transparent_half">#7fffffff</color>
+    <color name="link">#0082CB</color>
 
     <color name="black_overlay">#66000000</color>
 

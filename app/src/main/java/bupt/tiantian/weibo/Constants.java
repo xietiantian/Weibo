@@ -60,7 +60,7 @@ public interface Constants {
 
 
     /**
-     * constants defined by tiantian
+     * constants for message
      */
     public static final int MSG_SAVE_PIC_SUCCESS = 1000;
     public static final int MSG_SAVE_PIC_FAIL = 1001;
