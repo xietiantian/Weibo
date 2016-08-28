@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.activity.MainActivity;
-import bupt.tiantian.weibo.activity.MainActivityFragment;
+import bupt.tiantian.weibo.imgshow.PicUrlHolder;
 import bupt.tiantian.weibo.util.NetChecker;
 
 /**
@@ -26,6 +25,7 @@ public class OnPicClickListener implements AdapterView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println("position"+position);
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
         bundle.putBoolean("large",NetChecker.getLargePicFlag());

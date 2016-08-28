@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.activity;
+package bupt.tiantian.weibo;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,9 +19,7 @@ import com.sina.weibo.sdk.exception.WeiboException;
 
 import java.text.SimpleDateFormat;
 
-import bupt.tiantian.weibo.AccessTokenKeeper;
-import bupt.tiantian.weibo.Constants;
-import bupt.tiantian.weibo.R;
+import bupt.tiantian.weibo.statuslistshow.MainActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 

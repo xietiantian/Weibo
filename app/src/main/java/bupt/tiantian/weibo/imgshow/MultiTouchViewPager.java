@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.customview;
+package bupt.tiantian.weibo.imgshow;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.activity;
+package bupt.tiantian.weibo.imgshow;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -8,9 +8,6 @@ import android.view.View;
 import java.util.ArrayList;
 
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.customview.MultiTouchViewPager;
-import bupt.tiantian.weibo.helper.DraweePagerAdapter;
-import bupt.tiantian.weibo.helper.PicUrl;
 import me.relex.circleindicator.CircleIndicator;
 
 

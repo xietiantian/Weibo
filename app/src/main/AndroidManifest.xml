@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,16 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".statuslistshow.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.SettingActivity"
+            android:name=".settings.SettingActivity"
             android:label="@string/title_activity_setting"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="bupt.tiantian.weibo.activity.MainActivity" />
+                android:value=".statuslistshow.MainActivity" />
         </activity>
         <!-- android:parentActivityName=".activity.MainActivity" -->
         <receiver android:name=".util.NetChecker$NetCheckReceiver">
@@ -41,14 +41,14 @@
         </receiver>
 
         <activity
-            android:name=".activity.ShowPictureActivity"
+            android:name=".imgshow.ShowPictureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_show_picture"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".statuslistshow.MainActivity"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="bupt.tiantian.weibo.activity.MainActivity" />
+                android:value=".statuslistshow.MainActivity" />
         </activity>
     </application>
 

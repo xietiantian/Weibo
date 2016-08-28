@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.statuslistshow;
 
 /**
  * Created by tiantian on 16-6-21.
@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,8 +20,7 @@ import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.customview.DefaultOnLinkClickListener;
-import bupt.tiantian.weibo.customview.StatusTextView;
+import bupt.tiantian.weibo.imgshow.PicUrlHolder;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder> {
 
@@ -53,7 +51,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         holder.tvCreateTime.setText(status.created_at);
         holder.tvUserName.setText(status.user.screen_name);
         holder.tvStatus.setText(status.text);
-        holder.tvStatus.setOnLinkClickListener(new DefaultOnLinkClickListener(mContext));
+        holder.tvStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
 
         if (status.retweeted_status == null) {//原创微博
             holder.divider.setVisibility(View.GONE);
@@ -64,7 +62,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         } else {//转发微博
             retweetStatus = status.retweeted_status;
             holder.tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
-            holder.tvRetweetStatus.setOnLinkClickListener(new DefaultOnLinkClickListener(mContext));
+            holder.tvRetweetStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
             if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
                 picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
             }
@@ -88,6 +86,12 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             ImgGridAdapter imgGridAdapter = new ImgGridAdapter(mContext, picUrlHolder);
             holder.gridStatusImg.setAdapter(imgGridAdapter);
             holder.gridStatusImg.setOnItemClickListener(new OnPicClickListener(mContext, picUrlHolder));
+            holder.gridStatusImg.setOnTouchInvalidPositionListener(new NoScrollGridView.OnTouchInvalidPositionListener() {
+                @Override
+                public boolean onTouchInvalidPosition(int motionEvent) {
+                    return false; //不终止路由事件让父级控件处理事件
+                }
+            });
             holder.gridStatusImg.setVisibility(View.VISIBLE);
         } else {
             holder.gridStatusImg.setVisibility(View.GONE);
@@ -110,20 +114,23 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         public StatusTextView tvStatus;
         public StatusTextView tvRetweetStatus;
         public View divider;
-        public LinearLayout llInStatus;
-        public GridView gridStatusImg;
+        public LinearLayout llStatus;
+        public LinearLayout llRetweetStatus;
+        public NoScrollGridView gridStatusImg;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(new OnStatusCardClickListener());
+
             ivProfile = (SimpleDraweeView) itemView.findViewById(R.id.ivProfile);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvCreateTime = (TextView) itemView.findViewById(R.id.tvCreateTime);
             tvStatus = (StatusTextView) itemView.findViewById(R.id.tvStatus);
             tvRetweetStatus = (StatusTextView) itemView.findViewById(R.id.tvRetweetStatus);
             divider = itemView.findViewById(R.id.divider);
-            llInStatus = (LinearLayout) itemView.findViewById(R.id.llInStatus);
-            gridStatusImg = (GridView) itemView.findViewById(R.id.gridStatusImg);
-
+            llStatus = (LinearLayout) itemView.findViewById(R.id.llStatus);
+            gridStatusImg = (NoScrollGridView) itemView.findViewById(R.id.gridStatusImg);
         }
     }
 }

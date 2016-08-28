@@ -11,7 +11,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import bupt.tiantian.weibo.activity.SettingActivity;
+import bupt.tiantian.weibo.settings.SettingActivity;
 
 /**
  * Created by tiantian on 16-7-17.

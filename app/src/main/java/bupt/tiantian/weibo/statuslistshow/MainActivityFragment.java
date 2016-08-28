@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.activity;
+package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,7 +25,6 @@ import com.sina.weibo.sdk.utils.LogUtil;
 import bupt.tiantian.weibo.AccessTokenKeeper;
 import bupt.tiantian.weibo.Constants;
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.helper.StatusAdapter;
 
 /**
  * A placeholder fragment containing a simple view.

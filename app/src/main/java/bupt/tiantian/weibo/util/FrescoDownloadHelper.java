@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import bupt.tiantian.weibo.Constants;
-import bupt.tiantian.weibo.util.FileCopyHelper;
+import bupt.tiantian.weibo.MyHandler;
 
 /**
  * Created by tiantian on 16-7-12.

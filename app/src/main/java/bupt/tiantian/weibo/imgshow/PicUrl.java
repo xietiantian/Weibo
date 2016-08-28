@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.imgshow;
 
 import android.os.Parcel;
 import android.os.Parcelable;

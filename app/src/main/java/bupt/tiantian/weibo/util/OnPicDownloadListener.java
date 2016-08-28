@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.util;
 
 import java.io.File;
 

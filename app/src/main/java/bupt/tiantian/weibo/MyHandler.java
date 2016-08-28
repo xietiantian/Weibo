@@ -1,12 +1,9 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
-
-import bupt.tiantian.weibo.Constants;
-import bupt.tiantian.weibo.R;
 
 /**
  * Created by tiantian on 16-7-12.

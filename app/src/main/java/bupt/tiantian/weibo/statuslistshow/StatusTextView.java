@@ -1,16 +1,20 @@
-package bupt.tiantian.weibo.customview;
+package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.method.Touch;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,7 +33,7 @@ public class StatusTextView extends TextView {
 
     private static final int DEFAULT_LINK_HIGHLIGHT_COLOR = Color.BLUE;// 默认链接高亮颜色
     // 定义正则表达式
-    private static final String AT = "@([\\w\\-]{4,30})(?=\\W|$)";// @人
+    private static final String AT = "@([\\w\\-]{1,30})(?=\\W|$)";// @人
     private static final String TOPIC = "#(\\w+)#";// ##话题
     private static final String EMOJI = "\\[([a-zA-Z\\u4e00-\\u9fa5]{1,5})\\]";// 表情
     private static final String URL = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";// url
@@ -68,6 +72,7 @@ public class StatusTextView extends TextView {
     private int mLinkHighlightColor;// 链接高亮的颜色，默认蓝色
     private int mTextSize;// 文字大小，用来设置emoji图片大小
     private OnLinkClickListener mOnLinkClickListener;
+    private boolean mLinkHitFlag;
 
 
     public StatusTextView(Context context) {
@@ -83,7 +88,7 @@ public class StatusTextView extends TextView {
 
     private void initView(Context context, AttributeSet attrs) {
         // 要实现文字的点击效果，这里需要做特殊处理
-        setMovementMethod(LinkMovementMethod.getInstance());
+        setMovementMethod(CustomLinkMovementMethod.getInstance());
         mTextSize = (int) this.getTextSize();
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StatusTextView);
@@ -99,6 +104,12 @@ public class StatusTextView extends TextView {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mLinkHitFlag=false;
+        boolean result = super.onTouchEvent(event);//这里调用了LinkMovementMethod的onTouchEvent
+        return mLinkHitFlag;
+    }
 
     public void setLinkHighlightColor(int mLinkHighlightColor) {
         this.mLinkHighlightColor = mLinkHighlightColor;
@@ -144,7 +155,7 @@ public class StatusTextView extends TextView {
 
             // 处理@符号
             if (at != null) {
-                final String atKey=matcher.group(GROUP_NUM_AT_KEY);
+                final String atKey = matcher.group(GROUP_NUM_AT_KEY);
                 // 获取匹配位置
                 int start = matcher.start(GROUP_NUM_AT);
                 int end = start + at.length();
@@ -162,7 +173,7 @@ public class StatusTextView extends TextView {
 
             // 处理话题##符号
             if (topic != null) {
-                final String topicKey=matcher.group(GROUP_NUM_TOPIC_KEY);
+                final String topicKey = matcher.group(GROUP_NUM_TOPIC_KEY);
                 int start = matcher.start(GROUP_NUM_TOPIC);
                 int end = start + topic.length();
                 NoUnderlineClickableSpan clickableSpan = new NoUnderlineClickableSpan() {
@@ -178,7 +189,7 @@ public class StatusTextView extends TextView {
             }
 
             if (emoji != null) {
-                final String emojiKey=matcher.group(GROUP_NUM_EMOJI_KEY);
+                final String emojiKey = matcher.group(GROUP_NUM_EMOJI_KEY);
                 int start = matcher.start(GROUP_NUM_EMOJI);
                 int end = start + emoji.length();
                 String emojiLabel;
@@ -236,6 +247,7 @@ public class StatusTextView extends TextView {
     }
 
     public void setOnLinkClickListener(OnLinkClickListener mOnLinkClickListener) {
+//        super.setOnClickListener(mOnLinkClickListener);
         this.mOnLinkClickListener = mOnLinkClickListener;
     }
 
@@ -257,6 +269,73 @@ public class StatusTextView extends TextView {
             super.updateDrawState(ds);
             ds.setColor(mLinkHighlightColor);
             ds.setUnderlineText(false);
+        }
+    }
+
+
+    /**
+     * Created by tiantian on 16-8-24.
+     * 继承LinkMovementMethod
+     */
+    public static class CustomLinkMovementMethod extends LinkMovementMethod {
+
+        private static CustomLinkMovementMethod sInstance;
+
+        public static CustomLinkMovementMethod getInstance() {
+            if (sInstance == null) {
+                sInstance = new CustomLinkMovementMethod();
+            }
+            return sInstance;
+        }
+
+        @Override
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            int action = event.getAction();
+
+            if (action == MotionEvent.ACTION_UP ||
+                    action == MotionEvent.ACTION_DOWN) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+
+                x -= widget.getTotalPaddingLeft();
+                y -= widget.getTotalPaddingTop();
+
+                x += widget.getScrollX();
+                y += widget.getScrollY();
+
+                Layout layout = widget.getLayout();
+                int line = layout.getLineForVertical(y);
+                int off = layout.getOffsetForHorizontal(line, x);
+
+                ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
+
+                if (link.length != 0) {
+                    if (action == MotionEvent.ACTION_UP) {
+                        link[0].onClick(widget);
+                    } else if (action == MotionEvent.ACTION_DOWN) {
+                        Selection.setSelection(buffer,
+                                buffer.getSpanStart(link[0]),
+                                buffer.getSpanEnd(link[0]));
+                    }
+
+                    // tiantian add according to
+                    // http://stackoverflow.com/questions/8558732/listview-textview-with-linkmovementmethod-makes-list-item-unclickable
+                    if(widget instanceof StatusTextView){
+                        ((StatusTextView)widget).mLinkHitFlag=true;
+                    }
+
+                    return true;
+                } else {
+                    Selection.removeSelection(buffer);
+
+                    // tiantian add according to
+                    // http://stackoverflow.com/questions/8558732/listview-textview-with-linkmovementmethod-makes-list-item-unclickable
+                    Touch.onTouchEvent(widget, buffer, event);
+                    return false;
+
+                }
+            }
+            return super.onTouchEvent(widget, buffer, event);
         }
     }
 

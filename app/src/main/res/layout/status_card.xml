@@ -7,15 +7,14 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
     android:clickable="true"
-    android:orientation="horizontal">
-
-    <!--android:background="@drawable/button_rect_list_normal"-->
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llInStatus"
+        android:id="@+id/llStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,7 +67,7 @@
         </LinearLayout>
 
         <!-- 微博信息内容-->
-        <bupt.tiantian.weibo.customview.StatusTextView
+        <bupt.tiantian.weibo.statuslistshow.StatusTextView
             android:id="@+id/tvStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +87,7 @@
             android:layout_height="1px"
             android:background="@color/dividers" />
 
-        <bupt.tiantian.weibo.customview.StatusTextView
+        <bupt.tiantian.weibo.statuslistshow.StatusTextView
             android:id="@+id/tvRetweetStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -103,14 +102,14 @@
             status:linkHighlightColor="@color/link" />
 
         <!--微博配图All-->
-        <bupt.tiantian.weibo.customview.NoScrollGridView
+        <bupt.tiantian.weibo.statuslistshow.NoScrollGridView
             android:id="@+id/gridStatusImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:horizontalSpacing="4dp"
             android:numColumns="3"
-            android:verticalSpacing="4dp"></bupt.tiantian.weibo.customview.NoScrollGridView>
+            android:verticalSpacing="4dp"></bupt.tiantian.weibo.statuslistshow.NoScrollGridView>
 
         <LinearLayout
             android:layout_width="match_parent"

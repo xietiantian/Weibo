@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.imgshow;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

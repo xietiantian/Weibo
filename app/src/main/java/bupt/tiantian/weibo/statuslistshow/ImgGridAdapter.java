@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 
 import bupt.tiantian.weibo.R;
+import bupt.tiantian.weibo.imgshow.PicUrl;
+import bupt.tiantian.weibo.imgshow.PicUrlHolder;
 
 /**
  * Created by tiantian on 16-7-5.
@@ -22,9 +24,9 @@ public class ImgGridAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     public ImgGridAdapter(Context context, PicUrlHolder picUrlHolder) {
-        mContext=context;
-        mInflater=LayoutInflater.from(mContext);
-        mPicUrlHolder=picUrlHolder;
+        mContext = context;
+        mInflater = LayoutInflater.from(mContext);
+        mPicUrlHolder = picUrlHolder;
     }
 
 
@@ -35,9 +37,9 @@ public class ImgGridAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        if(position<getCount()){
+        if (position < getCount()) {
             return mPicUrlHolder.getPicUrlList().get(position);
-        }else{
+        } else {
             return null;
         }
     }
@@ -49,16 +51,16 @@ public class ImgGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        PicUrl picUrl= (PicUrl) getItem(position);
+        PicUrl picUrl = (PicUrl) getItem(position);
         View view;
         ViewHolder holder;
-        if(convertView==null) {
-            view=mInflater.inflate(R.layout.image_in_grid,parent,false);
-            holder=new ViewHolder(R.id.ivStatusInGrid,view);
+        if (convertView == null) {
+            view = mInflater.inflate(R.layout.image_in_grid, parent, false);
+            holder = new ViewHolder(R.id.ivStatusInGrid, view);
             view.setTag(holder);
-        }else{
+        } else {
             view = convertView;
-            holder= (ViewHolder) view.getTag();
+            holder = (ViewHolder) view.getTag();
         }
         DraweeController statusImgController = Fresco.newDraweeControllerBuilder()
                 .setOldController(holder.ivStatusInGrid.getController())
@@ -70,11 +72,11 @@ public class ImgGridAdapter extends BaseAdapter {
         return view;
     }
 
-    class ViewHolder{
+    class ViewHolder {
         SimpleDraweeView ivStatusInGrid;
 
-        public ViewHolder(int draweeViewId,View view){
-            ivStatusInGrid= (SimpleDraweeView) view.findViewById(draweeViewId);
+        public ViewHolder(int draweeViewId, View view) {
+            ivStatusInGrid = (SimpleDraweeView) view.findViewById(draweeViewId);
         }
     }
 }

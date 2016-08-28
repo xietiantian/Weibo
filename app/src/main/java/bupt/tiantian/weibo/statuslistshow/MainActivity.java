@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.activity;
+package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import bupt.tiantian.weibo.R;
+import bupt.tiantian.weibo.imgshow.ShowPictureActivity;
+import bupt.tiantian.weibo.settings.SettingActivity;
 import bupt.tiantian.weibo.util.NetChecker;
 
 public class MainActivity extends AppCompatActivity

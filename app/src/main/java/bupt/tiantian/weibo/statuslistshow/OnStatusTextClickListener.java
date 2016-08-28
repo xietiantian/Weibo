@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.customview;
+package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +9,12 @@ import android.widget.Toast;
 /**
  * Created by tiantian on 16-8-24.
  */
-public class DefaultOnLinkClickListener implements StatusTextView.OnLinkClickListener {
+public class OnStatusTextClickListener implements StatusTextView.OnLinkClickListener {
 
     public static final String TAG="onLinkClick";
     private Context mContext;
 
-    public DefaultOnLinkClickListener(Context context) {
+    public OnStatusTextClickListener(Context context) {
         mContext = context;
     }
 

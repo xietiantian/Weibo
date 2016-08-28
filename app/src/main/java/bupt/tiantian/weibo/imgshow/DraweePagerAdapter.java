@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.helper;
+package bupt.tiantian.weibo.imgshow;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,7 +22,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import java.util.ArrayList;
 
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.activity.ShowPictureActivity;
+import bupt.tiantian.weibo.util.FrescoDownloadHelper;
 import bupt.tiantian.weibo.util.NetChecker;
 import me.relex.photodraweeview.OnViewTapListener;
 import me.relex.photodraweeview.PhotoDraweeView;
