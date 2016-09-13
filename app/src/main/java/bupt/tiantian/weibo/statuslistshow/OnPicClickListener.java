@@ -25,7 +25,6 @@ public class OnPicClickListener implements AdapterView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("position"+position);
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
         bundle.putBoolean("large",NetChecker.getLargePicFlag());

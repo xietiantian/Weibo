@@ -159,6 +159,7 @@ public class MainActivityFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onStatusPicClicked(Bundle bundle);
+        void onStatusCardClicked(String statusId);
         // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
     }

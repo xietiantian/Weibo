@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -47,24 +47,30 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         Status retweetStatus = null;
         PicUrlHolder picUrlHolder = null;
 
-
         holder.tvCreateTime.setText(status.created_at);
         holder.tvUserName.setText(status.user.screen_name);
         holder.tvStatus.setText(status.text);
         holder.tvStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
+        holder.rlStatus.setOnClickListener(new OnStatusCardClickListener(mContext,status.id));
 
+        NoScrollGridView gridImg = holder.gridStatusImg;
         if (status.retweeted_status == null) {//原创微博
-            holder.divider.setVisibility(View.GONE);
-            holder.tvRetweetStatus.setVisibility(View.GONE);
+            holder.rlRetweetStatus.setVisibility(View.GONE);
             if (status.pic_urls != null && status.pic_urls.size() > 0) {
                 picUrlHolder = new PicUrlHolder(status.pic_urls);
+            } else {
+                holder.gridStatusImg.setVisibility(View.GONE);
             }
         } else {//转发微博
             retweetStatus = status.retweeted_status;
             holder.tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
             holder.tvRetweetStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
+            holder.rlRetweetStatus.setOnClickListener(new OnStatusCardClickListener(mContext,retweetStatus.id));
             if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
                 picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
+                gridImg = holder.gridRetweetStatusImg;
+            } else {
+                holder.gridRetweetStatusImg.setVisibility(View.GONE);
             }
         }
 
@@ -79,25 +85,21 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
 
         if (picUrlHolder != null) {//若有图，显示图片
             if (picUrlHolder.getLength() == 1 || picUrlHolder.getLength() == 2 || picUrlHolder.getLength() == 4) {
-                holder.gridStatusImg.setNumColumns(2);
+                gridImg.setNumColumns(2);
             } else {
-                holder.gridStatusImg.setNumColumns(3);
+                gridImg.setNumColumns(3);
             }
             ImgGridAdapter imgGridAdapter = new ImgGridAdapter(mContext, picUrlHolder);
-            holder.gridStatusImg.setAdapter(imgGridAdapter);
-            holder.gridStatusImg.setOnItemClickListener(new OnPicClickListener(mContext, picUrlHolder));
-            holder.gridStatusImg.setOnTouchInvalidPositionListener(new NoScrollGridView.OnTouchInvalidPositionListener() {
+            gridImg.setAdapter(imgGridAdapter);
+            gridImg.setOnItemClickListener(new OnPicClickListener(mContext, picUrlHolder));
+            gridImg.setOnTouchInvalidPositionListener(new NoScrollGridView.OnTouchInvalidPositionListener() {
                 @Override
                 public boolean onTouchInvalidPosition(int motionEvent) {
                     return false; //不终止路由事件让父级控件处理事件
                 }
             });
-            holder.gridStatusImg.setVisibility(View.VISIBLE);
-        } else {
-            holder.gridStatusImg.setVisibility(View.GONE);
+            gridImg.setVisibility(View.VISIBLE);
         }
-
-
     }
 
 
@@ -114,14 +116,14 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         public StatusTextView tvStatus;
         public StatusTextView tvRetweetStatus;
         public View divider;
-        public LinearLayout llStatus;
-        public LinearLayout llRetweetStatus;
+        public RelativeLayout rlStatus;
+        public RelativeLayout rlRetweetStatus;
         public NoScrollGridView gridStatusImg;
+        public NoScrollGridView gridRetweetStatusImg;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            itemView.setOnClickListener(new OnStatusCardClickListener());
 
             ivProfile = (SimpleDraweeView) itemView.findViewById(R.id.ivProfile);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
@@ -129,8 +131,10 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             tvStatus = (StatusTextView) itemView.findViewById(R.id.tvStatus);
             tvRetweetStatus = (StatusTextView) itemView.findViewById(R.id.tvRetweetStatus);
             divider = itemView.findViewById(R.id.divider);
-            llStatus = (LinearLayout) itemView.findViewById(R.id.llStatus);
+            rlStatus = (RelativeLayout) itemView.findViewById(R.id.rlStatus);
+            rlRetweetStatus = (RelativeLayout) itemView.findViewById(R.id.rlRetweetStatus);
             gridStatusImg = (NoScrollGridView) itemView.findViewById(R.id.gridStatusImg);
+            gridRetweetStatusImg = (NoScrollGridView) itemView.findViewById(R.id.gridRetweetStatusImg);
         }
     }
 }

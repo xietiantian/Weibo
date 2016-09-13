@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,25 +74,27 @@ public class MainActivity extends AppCompatActivity
         Intent intent=new Intent(MainActivity.this,ShowPictureActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
 
-//        ShowPictureFragment showPictureFragment = (ShowPictureFragment) getSupportFragmentManager().findFragmentById(R.id.fragShowPic);
-//        if (showPictureFragment != null) {
-//            // If article frag is available, we're in two-pane layout...
-//            // Call a method in the ShowPictureFragment to update its content
-//        } else {
-//            // Otherwise, we're in the one-pane layout and must swap frags...
-//            // Create fragment and give it an argument for the selected article
-//            ShowPictureFragment newShowPicFrag = new ShowPictureFragment();
-//            newShowPicFrag.setArguments(bundle);
-//            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//
-//            // Replace whatever is in the fragment_container view with this fragment,
-////            transaction.replace(R.id.layoutCoordinator, newShowPicFrag);
-//            transaction.add(R.id.layoutCoordinator, newShowPicFrag);
-//            // and add the transaction to the back stack so the user can navigate back
-//            transaction.addToBackStack(null);
-//            // Commit the transaction
-//            transaction.commit();
-//        }
+    @Override
+    public void onStatusCardClicked(String statusId) {
+        StatusFragment statusFragment= (StatusFragment) getSupportFragmentManager().findFragmentById(R.id.fragStatus);
+        if (statusFragment != null) {
+            // If article frag is available, we're in two-pane layout...
+            // Call a method in the ShowPictureFragment to update its content
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags...
+            // Create fragment and give it an argument for the selected article
+            StatusFragment newStatusFrag = StatusFragment.newInstance(statusId);
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            transaction.replace(R.id.fragMain, newStatusFrag);
+//            transaction.add(R.id.fragMain, newStatusFrag);
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.addToBackStack(null);
+            // Commit the transaction
+            transaction.commit();
+        }
     }
 }
