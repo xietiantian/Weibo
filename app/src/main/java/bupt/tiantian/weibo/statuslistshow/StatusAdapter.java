@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.imgshow.PicUrlHolder;
+import bupt.tiantian.weibo.util.Num2String;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder> {
 
@@ -50,8 +52,16 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         holder.tvCreateTime.setText(status.created_at);
         holder.tvUserName.setText(status.user.screen_name);
         holder.tvStatus.setText(status.text);
+        if (status.reposts_count > 0) {
+            holder.btnRetweet.setText(Num2String.transform(status.reposts_count));
+        }
+        if (status.attitudes_count > 0) {
+            holder.btnLike.setText(Num2String.transform(status.attitudes_count));
+        }
+        if (status.comments_count > 0) {
+            holder.btnComment.setText(Num2String.transform(status.comments_count));
+        }
         holder.tvStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
-        holder.rlStatus.setOnClickListener(new OnStatusCardClickListener(mContext,status.id));
 
         NoScrollGridView gridImg = holder.gridStatusImg;
         if (status.retweeted_status == null) {//原创微博
@@ -65,14 +75,16 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             retweetStatus = status.retweeted_status;
             holder.tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
             holder.tvRetweetStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
-            holder.rlRetweetStatus.setOnClickListener(new OnStatusCardClickListener(mContext,retweetStatus.id));
             if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
                 picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
                 gridImg = holder.gridRetweetStatusImg;
             } else {
                 holder.gridRetweetStatusImg.setVisibility(View.GONE);
             }
+            holder.rlRetweetStatus.setOnClickListener(new OnStatusCardClickListener(mContext, retweetStatus));
         }
+
+        holder.rlStatus.setOnClickListener(new OnStatusCardClickListener(mContext, status));
 
         //显示头像
         DraweeController profileImgController = Fresco.newDraweeControllerBuilder()
@@ -120,6 +132,9 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         public RelativeLayout rlRetweetStatus;
         public NoScrollGridView gridStatusImg;
         public NoScrollGridView gridRetweetStatusImg;
+        public Button btnLike;
+        public Button btnRetweet;
+        public Button btnComment;
 
 
         public ViewHolder(View itemView) {
@@ -135,6 +150,9 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             rlRetweetStatus = (RelativeLayout) itemView.findViewById(R.id.rlRetweetStatus);
             gridStatusImg = (NoScrollGridView) itemView.findViewById(R.id.gridStatusImg);
             gridRetweetStatusImg = (NoScrollGridView) itemView.findViewById(R.id.gridRetweetStatusImg);
+            btnComment = (Button) itemView.findViewById(R.id.btnComment);
+            btnLike = (Button) itemView.findViewById(R.id.btnLike);
+            btnRetweet = (Button) itemView.findViewById(R.id.btnRetweet);
         }
     }
 }

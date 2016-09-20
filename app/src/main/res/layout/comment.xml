@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:status="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <!-- 头像-->
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/ivCommentProfile"
+        android:layout_width="50dp"
+        android:layout_gravity="top"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        fresco:roundAsCircle="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <!-- 昵称-->
+        <TextView
+            android:id="@+id/tvCommentUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="16dp"
+            android:maxLines="1"
+            android:textColor="@color/text"
+            android:textSize="12sp" />
+
+        <!-- 微博发布时间（以及来自……）-->
+        <TextView
+            android:id="@+id/tvCommentCreateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:maxLines="20"
+            android:textColor="@color/secondary"
+            android:textSize="10sp" />
+
+        <!-- 微博信息内容-->
+        <bupt.tiantian.weibo.statuslistshow.StatusTextView
+            android:id="@+id/tvComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@color/text"
+            android:textSize="14sp"
+            status:linkHighlightColor="@color/link" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnCommentLike"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/transparent"
+        android:drawableStart="@drawable/ic_thumb_up"
+        android:padding="10dp"
+        android:textColor="@color/secondary"
+        android:textSize="10sp" />
+</LinearLayout>

@@ -31,7 +31,7 @@ import bupt.tiantian.weibo.R;
  */
 public class MainActivityFragment extends Fragment {
 
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = "MainActivityFragment";
     /**
      * 当前 Token 信息
      */
@@ -68,7 +68,7 @@ public class MainActivityFragment extends Fragment {
 
 
         mMainFragmentView = inflater.inflate(R.layout.fragment_main, container, false);
-        mRecyclerView = (RecyclerView) mMainFragmentView.findViewById(R.id.list);
+        mRecyclerView = (RecyclerView) mMainFragmentView.findViewById(R.id.rvStatusList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mProgressBar = (ProgressBar) mMainFragmentView.findViewById(R.id.progressBar);
@@ -145,13 +145,6 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mRequestListener != null) {
-//            mRequestListener.onFragmentInteraction(uri);
-//        }
-//    }
-
 
     public OnFragmentInteractionListener getInteractListener() {
         return mInteractListener;
@@ -159,7 +152,7 @@ public class MainActivityFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onStatusPicClicked(Bundle bundle);
-        void onStatusCardClicked(String statusId);
+        void onStatusCardClicked(Bundle bundle);
         // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
     }

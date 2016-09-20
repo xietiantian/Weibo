@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +15,12 @@ import android.view.View;
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.imgshow.ShowPictureActivity;
 import bupt.tiantian.weibo.settings.SettingActivity;
+import bupt.tiantian.weibo.statusshow.StatusFragment;
 import bupt.tiantian.weibo.util.NetChecker;
 
 public class MainActivity extends AppCompatActivity
-        implements MainActivityFragment.OnFragmentInteractionListener{
+        implements MainActivityFragment.OnFragmentInteractionListener,
+        StatusFragment.OnFragmentInteractionListener{
 
 
     private AppBarLayout mLayoutToolbar;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStatusCardClicked(String statusId) {
+    public void onStatusCardClicked(Bundle bundle) {
         StatusFragment statusFragment= (StatusFragment) getSupportFragmentManager().findFragmentById(R.id.fragStatus);
         if (statusFragment != null) {
             // If article frag is available, we're in two-pane layout...
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             // Otherwise, we're in the one-pane layout and must swap frags...
             // Create fragment and give it an argument for the selected article
-            StatusFragment newStatusFrag = StatusFragment.newInstance(statusId);
+            StatusFragment newStatusFrag = StatusFragment.newInstance(bundle);
             android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this fragment,

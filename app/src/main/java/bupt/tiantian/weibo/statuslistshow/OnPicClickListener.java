@@ -2,11 +2,13 @@ package bupt.tiantian.weibo.statuslistshow;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.imgshow.PicUrlHolder;
+import bupt.tiantian.weibo.statusshow.StatusFragment;
 import bupt.tiantian.weibo.util.NetChecker;
 
 /**
@@ -25,13 +27,17 @@ public class OnPicClickListener implements AdapterView.OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("position", position);
-        bundle.putBoolean("large",NetChecker.getLargePicFlag());
-        bundle.putParcelableArrayList("url", mPicUrlHolder.getPicUrlList());
-        MainActivityFragment mainFrag= (MainActivityFragment) ((MainActivity)mContext).getSupportFragmentManager().findFragmentById(R.id.fragMain);
-        if(mainFrag!=null){
-            mainFrag.getInteractListener().onStatusPicClicked(bundle);
+        Fragment fragment = ((MainActivity) mContext).getSupportFragmentManager().findFragmentById(R.id.fragMain);
+        if (fragment != null) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            bundle.putBoolean("large", NetChecker.getLargePicFlag());
+            bundle.putParcelableArrayList("url", mPicUrlHolder.getPicUrlList());
+            if (fragment instanceof MainActivityFragment) {
+                ((MainActivityFragment) fragment).getInteractListener().onStatusPicClicked(bundle);
+            } else if (fragment instanceof StatusFragment) {
+                ((StatusFragment) fragment).getInteractListener().onStatusPicClicked(bundle);
+            }
         }
     }
 }
