@@ -1,10 +1,12 @@
-package bupt.tiantian.weibo.statuslistshow;
+package bupt.tiantian.weibo.statusshow;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
+
+import bupt.tiantian.weibo.statuslistshow.StatusTextView;
 
 /**
  * Created by tiantian on 16-8-24.

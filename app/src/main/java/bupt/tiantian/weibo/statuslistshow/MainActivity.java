@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -88,8 +89,8 @@ public class MainActivity extends AppCompatActivity
             // Create fragment and give it an argument for the selected article
             StatusFragment newStatusFrag = StatusFragment.newInstance(bundle);
             android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
             // Replace whatever is in the fragment_container view with this fragment,
+//            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             transaction.replace(R.id.fragMain, newStatusFrag);
 //            transaction.add(R.id.fragMain, newStatusFrag);
             // and add the transaction to the back stack so the user can navigate back

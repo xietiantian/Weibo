@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo.statuslistshow;
+package bupt.tiantian.weibo.statusshow;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.imgshow.PicUrlHolder;
+import bupt.tiantian.weibo.statuslistshow.MainActivity;
+import bupt.tiantian.weibo.statuslistshow.MainActivityFragment;
 import bupt.tiantian.weibo.statusshow.StatusFragment;
 import bupt.tiantian.weibo.util.NetChecker;
 

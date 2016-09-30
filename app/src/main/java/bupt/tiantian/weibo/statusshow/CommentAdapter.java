@@ -13,15 +13,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.sina.weibo.sdk.openapi.models.Comment;
 import com.sina.weibo.sdk.openapi.models.CommentList;
-import com.sina.weibo.sdk.openapi.models.Status;
 
 import bupt.tiantian.weibo.R;
-import bupt.tiantian.weibo.imgshow.PicUrlHolder;
-import bupt.tiantian.weibo.statuslistshow.NoScrollGridView;
-import bupt.tiantian.weibo.statuslistshow.OnStatusCardClickListener;
-import bupt.tiantian.weibo.statuslistshow.OnStatusTextClickListener;
 import bupt.tiantian.weibo.statuslistshow.StatusTextView;
-import bupt.tiantian.weibo.util.Num2String;
 
 /**
  * Created by tiantian on 16-9-20.

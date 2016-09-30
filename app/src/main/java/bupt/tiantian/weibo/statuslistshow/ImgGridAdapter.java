@@ -66,7 +66,7 @@ public class ImgGridAdapter extends BaseAdapter {
                 .setOldController(holder.ivStatusInGrid.getController())
                 .setLowResImageRequest(ImageRequest.fromUri(picUrl.getThumbnailUrl()))
                 .setImageRequest(ImageRequest.fromUri(picUrl.getMiddleUrl()))
-                .setAutoPlayAnimations(true)
+                .setAutoPlayAnimations(false)
                 .build();
         holder.ivStatusInGrid.setController(statusImgController);
         return view;

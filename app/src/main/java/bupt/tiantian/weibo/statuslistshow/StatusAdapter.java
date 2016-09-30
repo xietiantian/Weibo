@@ -22,6 +22,9 @@ import com.sina.weibo.sdk.openapi.models.StatusList;
 
 import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.imgshow.PicUrlHolder;
+import bupt.tiantian.weibo.statusshow.OnPicClickListener;
+import bupt.tiantian.weibo.statusshow.OnStatusCardClickListener;
+import bupt.tiantian.weibo.statusshow.OnStatusTextClickListener;
 import bupt.tiantian.weibo.util.Num2String;
 
 public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder> {
@@ -46,72 +49,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Status status = mStatuses.statusList.get(position);
-        Status retweetStatus = null;
-        PicUrlHolder picUrlHolder = null;
-
-        holder.tvCreateTime.setText(status.created_at);
-        holder.tvUserName.setText(status.user.screen_name);
-        holder.tvStatus.setText(status.text);
-        if (status.reposts_count > 0) {
-            holder.btnRetweet.setText(Num2String.transform(status.reposts_count));
-        }
-        if (status.attitudes_count > 0) {
-            holder.btnLike.setText(Num2String.transform(status.attitudes_count));
-        }
-        if (status.comments_count > 0) {
-            holder.btnComment.setText(Num2String.transform(status.comments_count));
-        }
-        holder.tvStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
-
-        NoScrollGridView gridImg = holder.gridStatusImg;
-        if (status.retweeted_status == null) {//原创微博
-            holder.rlRetweetStatus.setVisibility(View.GONE);
-            if (status.pic_urls != null && status.pic_urls.size() > 0) {
-                picUrlHolder = new PicUrlHolder(status.pic_urls);
-            } else {
-                holder.gridStatusImg.setVisibility(View.GONE);
-            }
-        } else {//转发微博
-            retweetStatus = status.retweeted_status;
-            holder.tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
-            holder.tvRetweetStatus.setOnLinkClickListener(new OnStatusTextClickListener(mContext));
-            if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
-                picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
-                gridImg = holder.gridRetweetStatusImg;
-            } else {
-                holder.gridRetweetStatusImg.setVisibility(View.GONE);
-            }
-            holder.rlRetweetStatus.setOnClickListener(new OnStatusCardClickListener(mContext, retweetStatus));
-        }
-
-        holder.rlStatus.setOnClickListener(new OnStatusCardClickListener(mContext, status));
-
-        //显示头像
-        DraweeController profileImgController = Fresco.newDraweeControllerBuilder()
-                .setOldController(holder.ivProfile.getController())
-                .setLowResImageRequest(ImageRequest.fromUri(status.user.profile_image_url))
-                .setImageRequest(ImageRequest.fromUri(status.user.avatar_large))
-                .build();
-        holder.ivProfile.setController(profileImgController);
-
-
-        if (picUrlHolder != null) {//若有图，显示图片
-            if (picUrlHolder.getLength() == 1 || picUrlHolder.getLength() == 2 || picUrlHolder.getLength() == 4) {
-                gridImg.setNumColumns(2);
-            } else {
-                gridImg.setNumColumns(3);
-            }
-            ImgGridAdapter imgGridAdapter = new ImgGridAdapter(mContext, picUrlHolder);
-            gridImg.setAdapter(imgGridAdapter);
-            gridImg.setOnItemClickListener(new OnPicClickListener(mContext, picUrlHolder));
-            gridImg.setOnTouchInvalidPositionListener(new NoScrollGridView.OnTouchInvalidPositionListener() {
-                @Override
-                public boolean onTouchInvalidPosition(int motionEvent) {
-                    return false; //不终止路由事件让父级控件处理事件
-                }
-            });
-            gridImg.setVisibility(View.VISIBLE);
-        }
+        holder.createStatusCrad(status, mContext);
     }
 
 
@@ -153,6 +91,74 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             btnComment = (Button) itemView.findViewById(R.id.btnComment);
             btnLike = (Button) itemView.findViewById(R.id.btnLike);
             btnRetweet = (Button) itemView.findViewById(R.id.btnRetweet);
+        }
+
+        public void createStatusCrad(Status status, Context context) {
+            Status retweetStatus = null;
+            PicUrlHolder picUrlHolder = null;
+
+            tvCreateTime.setText(status.created_at);
+            tvUserName.setText(status.user.screen_name);
+            tvStatus.setText(status.text);
+            if (status.reposts_count > 0) {
+                btnRetweet.setText(Num2String.transform(status.reposts_count));
+            }
+            if (status.attitudes_count > 0) {
+                btnLike.setText(Num2String.transform(status.attitudes_count));
+            }
+            if (status.comments_count > 0) {
+                btnComment.setText(Num2String.transform(status.comments_count));
+            }
+            tvStatus.setOnLinkClickListener(new OnStatusTextClickListener(context));
+
+            NoScrollGridView gridImg = gridStatusImg;
+            if (status.retweeted_status == null) {//原创微博
+                rlRetweetStatus.setVisibility(View.GONE);
+                if (status.pic_urls != null && status.pic_urls.size() > 0) {
+                    picUrlHolder = new PicUrlHolder(status.pic_urls);
+                } else {
+                    gridStatusImg.setVisibility(View.GONE);
+                }
+            } else {//转发微博
+                retweetStatus = status.retweeted_status;
+                tvRetweetStatus.setText("@" + retweetStatus.user.screen_name + ": " + retweetStatus.text);
+                tvRetweetStatus.setOnLinkClickListener(new OnStatusTextClickListener(context));
+                if (retweetStatus.pic_urls != null && retweetStatus.pic_urls.size() > 0) {
+                    picUrlHolder = new PicUrlHolder(retweetStatus.pic_urls);
+                    gridImg = gridRetweetStatusImg;
+                } else {
+                    gridRetweetStatusImg.setVisibility(View.GONE);
+                }
+                rlRetweetStatus.setOnClickListener(new OnStatusCardClickListener(context, retweetStatus));
+            }
+            rlStatus.setOnClickListener(new OnStatusCardClickListener(context, status));
+
+            //显示头像
+            DraweeController profileImgController = Fresco.newDraweeControllerBuilder()
+                    .setOldController(ivProfile.getController())
+                    .setLowResImageRequest(ImageRequest.fromUri(status.user.profile_image_url))
+                    .setImageRequest(ImageRequest.fromUri(status.user.avatar_large))
+                    .build();
+            ivProfile.setController(profileImgController);
+
+
+            if (picUrlHolder != null) {//若有图，显示图片
+                if (picUrlHolder.getLength() == 1 || picUrlHolder.getLength() == 2 || picUrlHolder.getLength() == 4) {
+                    gridImg.setNumColumns(2);
+                } else {
+                    gridImg.setNumColumns(3);
+                }
+                ImgGridAdapter imgGridAdapter = new ImgGridAdapter(context, picUrlHolder);
+                gridImg.setAdapter(imgGridAdapter);
+                gridImg.setOnItemClickListener(new OnPicClickListener(context, picUrlHolder));
+                gridImg.setOnTouchInvalidPositionListener(new NoScrollGridView.OnTouchInvalidPositionListener() {
+                    @Override
+                    public boolean onTouchInvalidPosition(int motionEvent) {
+                        return false; //不终止路由事件让父级控件处理事件
+                    }
+                });
+                gridImg.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

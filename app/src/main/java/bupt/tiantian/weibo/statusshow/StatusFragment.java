@@ -3,7 +3,6 @@ package bupt.tiantian.weibo.statusshow;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -35,9 +36,6 @@ import bupt.tiantian.weibo.R;
 import bupt.tiantian.weibo.imgshow.PicUrlHolder;
 import bupt.tiantian.weibo.statuslistshow.ImgGridAdapter;
 import bupt.tiantian.weibo.statuslistshow.NoScrollGridView;
-import bupt.tiantian.weibo.statuslistshow.OnPicClickListener;
-import bupt.tiantian.weibo.statuslistshow.OnStatusCardClickListener;
-import bupt.tiantian.weibo.statuslistshow.OnStatusTextClickListener;
 import bupt.tiantian.weibo.statuslistshow.StatusTextView;
 import bupt.tiantian.weibo.util.Num2String;
 import bupt.tiantian.weibo.util.StatusParcelable;
@@ -69,10 +67,10 @@ public class StatusFragment extends Fragment {
 
     private Status mStatus;
     private View mStatusFragmentView;
-    private CardView mStatusCard;
     private RecyclerView mRecyclerView;
     private CommentAdapter mAdapter;
     private OnFragmentInteractionListener mInteractListener;
+    private LinearLayout mStatusCard;
 
     public StatusFragment() {
         // Required empty public constructor
@@ -96,8 +94,8 @@ public class StatusFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if(bundle!= null){
-            mStatus=((StatusParcelable) bundle.getParcelable(STATUS)).mStatus;
+        if (bundle != null) {
+            mStatus = ((StatusParcelable) bundle.getParcelable(STATUS)).mStatus;
         }
     }
 
@@ -110,12 +108,19 @@ public class StatusFragment extends Fragment {
         mCommentsAPI = new CommentsAPI(this.getActivity(), Constants.APP_KEY, mAccessToken);
 
         // Inflate the layout for this fragment
-        mStatusFragmentView=inflater.inflate(R.layout.fragment_status, container, false);
-        mStatusCard= (CardView) mStatusFragmentView.findViewById(R.id.status_card);
-        StatusCardViewHolder holder = new StatusCardViewHolder(this.getContext(),mStatusCard);
+        mStatusFragmentView = inflater.inflate(R.layout.fragment_status, container, false);
+        mStatusCard = (LinearLayout) mStatusFragmentView.findViewById(R.id.status_card);
+        StatusCardViewHolder holder = new StatusCardViewHolder(this.getContext(), mStatusCard);
         holder.createView(mStatus);
         mRecyclerView = (RecyclerView) mStatusFragmentView.findViewById(R.id.rvCommentsList);
+
+        //获得RecyclerViewHeader对象
+        RecyclerViewHeader header = (RecyclerViewHeader) mStatusFragmentView.findViewById(R.id.header);
+        // set LayoutManager for RecyclerView
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        //Attach RecyclerViewHeader to your RecyclerView:
+        header.attachTo(mRecyclerView);
+
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setVisibility(View.INVISIBLE);
         new Thread(new CommentRefreshThread()).start();
@@ -126,7 +131,7 @@ public class StatusFragment extends Fragment {
         @Override
         public void run() {
             if (mCommentsAPI != null) {
-                mCommentsAPI.show(Long.parseLong(mStatus.id),0L, 0L, 10, 1, 0, mRequestListener);//参数3：加载10条评论
+                mCommentsAPI.show(Long.parseLong(mStatus.id), 0L, 0L, 10, 1, 0, mRequestListener);//参数3：加载10条评论
             }
         }
     }
@@ -138,7 +143,7 @@ public class StatusFragment extends Fragment {
                 LogUtil.i(TAG, response);
                 if (response.startsWith("{\"comments\"")) {
                     // 调用 StatusList#parse 解析字符串成微博列表对象
-                    CommentList comments= CommentList.parse(response);
+                    CommentList comments = CommentList.parse(response);
                     if (comments != null && comments.total_number > 0) {
                         mAdapter = new CommentAdapter(getContext(), comments);
                         mRecyclerView.setAdapter(mAdapter);
@@ -189,10 +194,11 @@ public class StatusFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onStatusPicClicked(Bundle bundle);
+
         void onStatusCardClicked(Bundle bundle);
     }
 
-    public static class StatusCardViewHolder{
+    public static class StatusCardViewHolder {
         public SimpleDraweeView ivProfile;
         public TextView tvUserName;
         public TextView tvCreateTime;
@@ -226,7 +232,7 @@ public class StatusFragment extends Fragment {
             mContext = context;
         }
 
-        public void createView(Status status){
+        public void createView(Status status) {
             Status retweetStatus = null;
             PicUrlHolder picUrlHolder = null;
 
