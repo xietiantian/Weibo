@@ -1,4 +1,4 @@
-package bupt.tiantian.weibo;
+package bupt.tiantian.weibo.login;
 
 /*
  * Copyright (C) 2010-2013 The SINA WEIBO Open Source Project
@@ -19,6 +19,8 @@ package bupt.tiantian.weibo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.hardware.camera2.params.StreamConfigurationMap;
+
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 /**
@@ -30,10 +32,13 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 public class AccessTokenKeeper {
     private static final String PREFERENCES_NAME = "com_weibo_sdk_android";
 
-    private static final String KEY_UID = "uid";
-    private static final String KEY_ACCESS_TOKEN = "access_token";
-    private static final String KEY_EXPIRES_IN = "expires_in";
-    private static final String KEY_REFRESH_TOKEN = "refresh_token";
+    public static final String KEY_UID = "uid";
+    public static final String KEY_ACCESS_TOKEN = "access_token";
+    public static final String KEY_EXPIRES_IN = "expires_in";
+    public static final String KEY_REFRESH_TOKEN = "refresh_token";
+    public static final String KEY_SCREEN_NAME = "screen_name";//用户昵称
+    public static final String KEY_AVATAR_LARGE = "avatar_large";//用户头像
+
 
     /**
      * 保存 Token 对象到 SharedPreferences。

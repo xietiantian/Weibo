@@ -16,6 +16,8 @@
 
 package bupt.tiantian.weibo;
 
+import android.os.AsyncTask;
+
 /**
  * 该类定义了微博授权时所需要的参数。
  *

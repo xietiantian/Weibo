@@ -22,7 +22,7 @@ import com.sina.weibo.sdk.openapi.models.ErrorInfo;
 import com.sina.weibo.sdk.openapi.models.StatusList;
 import com.sina.weibo.sdk.utils.LogUtil;
 
-import bupt.tiantian.weibo.AccessTokenKeeper;
+import bupt.tiantian.weibo.login.AccessTokenKeeper;
 import bupt.tiantian.weibo.Constants;
 import bupt.tiantian.weibo.R;
 
