@@ -39,6 +39,7 @@ import bupt.tiantian.weibo.models.SimpleUser;
 import bupt.tiantian.weibo.sql.UserTokenDao;
 import bupt.tiantian.weibo.sql.UserTokenServise;
 import bupt.tiantian.weibo.statuslistshow.MainActivity;
+import bupt.tiantian.weibo.util.NetChecker;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -96,6 +97,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        NetChecker.setNetWorkFlag(LoginActivity.this);
+
+
 //        tvToken = (TextView) findViewById(R.id.tvToken);
         llButtons = (LinearLayout) findViewById(R.id.llButtons);
         rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
@@ -129,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mUsers = mUserTokenDao.getUserTokenList();//这是可用的User list
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(this);
         //如果数据库中有可用的User且从pref中读到了上次登陆的token
-        if (mUsers.size() > 0) {
+        if (mUsers.size() > 0 && NetChecker.getNetworkFlag() != NetChecker.NO_NETWORK) {
             mSelectedUserIndex = 0;
             if (accessToken.isSessionValid()) {
                 for (int i = 0; i < mUsers.size(); i++) {

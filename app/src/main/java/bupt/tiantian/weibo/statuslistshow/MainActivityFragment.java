@@ -96,6 +96,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        System.out.println("on attach");
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         if (context instanceof OnFragmentInteractionListener) {
