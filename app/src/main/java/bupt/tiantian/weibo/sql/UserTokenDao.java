@@ -60,7 +60,7 @@ public class UserTokenDao implements UserTokenServise {
         boolean flag = false;
         try {
             database = mHelper.getWritableDatabase();
-            database.delete(TB_NAME,"uid=?",new String[]{uid});
+            database.delete(TB_NAME, "uid=?", new String[]{uid});
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,17 +97,18 @@ public class UserTokenDao implements UserTokenServise {
     @Override
     public List<SimpleUser> getTokenList() {
         SQLiteDatabase database = null;
+        Cursor cursor = null;
         List<SimpleUser> userList = new ArrayList<>();
         try {
             database = mHelper.getReadableDatabase();
-            Cursor cursor = database.query(TB_NAME, null, null, null, null, null, null);
+            cursor = database.query(TB_NAME, null, null, null, null, null, null);
             while (cursor.moveToNext()) {
                 SimpleUser user = new SimpleUser(
                         cursor.getString(cursor.getColumnIndex(KEY_UID)),
                         cursor.getString(cursor.getColumnIndex(KEY_ACCESS_TOKEN)),
                         cursor.getString(cursor.getColumnIndex(KEY_REFRESH_TOKEN)),
                         cursor.getLong(cursor.getColumnIndex(KEY_EXPIRES_IN)),
-                        null,null);
+                        null, null);
                 userList.add(user);
             }
         } catch (Exception e) {
@@ -116,20 +117,25 @@ public class UserTokenDao implements UserTokenServise {
             if (database != null) {
                 database.close();
             }
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return userList;
     }
+
     @Override
     public List<SimpleUser> getUserTokenList() {
         SQLiteDatabase database = null;
+        Cursor cursor = null;
         List<SimpleUser> userList = new ArrayList<>();
         try {
             database = mHelper.getReadableDatabase();
-            Cursor cursor = database.query(TB_NAME, null, null, null, null, null, null);
+            cursor = database.query(TB_NAME, null, null, null, null, null, null);
             String screenName;
             while (cursor.moveToNext()) {
                 screenName = cursor.getString(cursor.getColumnIndex(KEY_SCREEN_NAME));
-                if(!TextUtils.isEmpty(screenName)) {
+                if (!TextUtils.isEmpty(screenName)) {
                     SimpleUser user = new SimpleUser(
                             cursor.getString(cursor.getColumnIndex(KEY_UID)),
                             cursor.getString(cursor.getColumnIndex(KEY_ACCESS_TOKEN)),
@@ -145,6 +151,9 @@ public class UserTokenDao implements UserTokenServise {
         } finally {
             if (database != null) {
                 database.close();
+            }
+            if (cursor != null) {
+                cursor.close();
             }
         }
         return userList;
